@@ -29,4 +29,4 @@ Made by [Fog Creek](https://fogcreek.com/)
 //enviroment variable
 mongourl=
 fbmsgurl=
-VERIFYTOKEN=lady_killer
+VERIFYTOKEN=
