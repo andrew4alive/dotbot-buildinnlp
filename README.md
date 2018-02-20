@@ -25,3 +25,8 @@ Made by [Fog Creek](https://fogcreek.com/)
 -------------------
 
 \ ゜o゜)ノ
+
+//enviroment variable
+mongourl=
+fbmsgurl=
+VERIFYTOKEN=lady_killer
