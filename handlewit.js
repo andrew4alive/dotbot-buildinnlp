@@ -2,15 +2,16 @@ var fbresponselist = require('./fbresponselist');
 
 var respond = require('./respondhandler');
 
-var confidence=0.7;
+var confidence=0.5;
 
 module.exports=function(psid,msg,ob,resolve,reject,handletext){
-      var wr=fbresponselist.wit;
+    //  var wr=JSON.parse(JSON.stringify(fbresponselist.wit));
+  var wr=fbresponselist.wit;
       var entities = wr.entities;
      // console.log( ob.entities);   
       var hcA = highconfidenceAll(ob.entities);
       //console.log(hcA);
-  var match=witmatch(wr,hcA);
+  var match=witmatch(wr,hcA,resolve,reject);
   //   console.log( witmatch(wr,hcA));
   if(match!=null){
     match.wit=true;
@@ -22,8 +23,10 @@ module.exports=function(psid,msg,ob,resolve,reject,handletext){
 }
 
 
-function witmatch(wr,hcA){
+function witmatch(wr,hcA,resolve,reject){
     var result=null;
+  var wr = JSON.parse(JSON.stringify(wr));
+  var hcA=JSON.parse(JSON.stringify(hcA));
         for(var i=0;i<wr.length;i++){
           var arr = wr[i].entities;
           var ky1 = Object.keys(hcA);
@@ -31,11 +34,8 @@ function witmatch(wr,hcA){
           var hcAkyc=Object.keys(hcA).length;
           for(var ky in arr){
             if(ky1.indexOf(ky)!=-1){
-              if(arr[ky].value==hcA[ky].value){
-                if( hcA[ky].confidence>confidence){
-                   count=count+1;
-                }
-              }
+                  
+              count=loopmatch(arr[ky],hcA[ky],count);
             }
           }/// one object loop
         //  console.log(count,Object.keys(arr).length);
@@ -44,17 +44,20 @@ function witmatch(wr,hcA){
             return null;
           }
           if(count == hcAkyc){ 
+            wr[i].entities= hcA;
             return wr[i];
           }
           else if(count == Object.keys(arr).length){
               if(result==null){
                 result=wr[i];
+                result.entities=hcA;
                 result.count=count;
                 continue;
               }
               var ky=Object.keys(result);
             if(ky.indexOf('count')&&result.count<count){
                 result=wr[i];
+              result.entities=hcA;
                 result.count=count;
                 continue;
             }
@@ -68,8 +71,30 @@ function witmatch(wr,hcA){
 }
 
 
+function loopmatch(arr,hcA,count){
+  try{
+    if(hcA.confidence>confidence){
+              
+              if(arr.value[0]=='*'){
+                  count=count+1;
+              }
+              
+               else if( arr.value==hcA.value){
+                   count=count+1;
+                }
+              
+           
+              }
+  }
+  catch(err)
+  {
+  }
+return count;
+}
+
 function highconfidenceAll(entities){
    // console.log(entities);
+  var entities = JSON.parse(JSON.stringify(entities));
   var re ={};
    for (var ky in entities){
         // console.log(ky);

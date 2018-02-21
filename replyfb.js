@@ -4,6 +4,7 @@ const request = require('request')
 var reply = {};
 
 reply.withtext=function(url,psid,text){
+  var text=text;
  return new Promise(function(resolve,reject){
   var request_body = {
     "recipient": {

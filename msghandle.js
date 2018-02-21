@@ -60,7 +60,7 @@ h.handle=function(psid,msg){
   }
     
     
-    },2000);
+    },1500);
 
   
   });

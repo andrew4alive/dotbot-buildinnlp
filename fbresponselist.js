@@ -13,15 +13,15 @@ for the *list object respond define by user
   {rtext:"hi",stext:"hello can i help you?"} *rtext is the recive text and *stext is the respond text
   
 */
-var witres = require('./witreslist');
-//var witres = [];
-module.exports={
+var witres = require('./reslist/witreslist');
+var textlist=require('./reslist/textres');
+
+
+  var res={
   defaultres:"sorry , i cant understand your request",
-  list:[
-    {rtext:'hi',stext:'hello can i help you?'},
-    {rtext:"can u show me google?",stext:"https://www.google.com"},
-    {rtext:"google me",stext:"https://www.google.com"}
-  ],
+  list:textlist,
   wit:witres
 
 };
+
+module.exports=JSON.parse(JSON.stringify(res));

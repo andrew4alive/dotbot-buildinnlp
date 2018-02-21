@@ -3,6 +3,7 @@ var fbresponselist = require('./fbresponselist');
 var respond = require('./respondhandler');
 
 module.exports=function(psid,msg,resolve,reject){
+ // var fbresponselist=JSON.parse(JSON.stringify(fbresponselist.wit));
      if(fbresponselist.list.length>0){
    var ly =reslistloop(psid,msg); // responloop exec ?
       resolve (ly); 
