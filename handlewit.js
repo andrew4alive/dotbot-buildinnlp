@@ -6,7 +6,9 @@ var confidence=0.5;
 
 module.exports=function(psid,msg,ob,resolve,reject,handletext){
     //  var wr=JSON.parse(JSON.stringify(fbresponselist.wit));
+  try{
   var wr=fbresponselist.wit;
+ 
       var entities = wr.entities;
      // console.log( ob.entities);   
       var hcA = highconfidenceAll(ob.entities);
@@ -19,7 +21,10 @@ module.exports=function(psid,msg,ob,resolve,reject,handletext){
      resolve(false);
      return false;
   }
+  }
+  catch(err){
     handletext(psid,msg,resolve,reject);
+  }
 }
 
 
