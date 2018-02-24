@@ -13,8 +13,9 @@ module.exports=function witrespond(list){
 
   var entities=list.entities;
   var stext=list.stext;
-  console.log(stext);
-    console.log(entities);
+    console.log('from witrespon d file');
+ // console.log(stext);
+   console.log(entities);
 
     var sta=findbracket(stext,true);
    list.stext = replacelist(ls,sta);

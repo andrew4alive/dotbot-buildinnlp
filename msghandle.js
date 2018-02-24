@@ -47,7 +47,7 @@ h.handle=function(psid,msg){
     setTimeout(function(){
     
        if(msg.text){
-    var w = wit;
+    var w = null;
       
      handle(psid,msg,w).then(function(ob){
       // console.log(ob);
@@ -73,7 +73,7 @@ h.handle=function(psid,msg){
 //helper function for handle text
 function handle(psid,msg,ai){
  
-  var ai=(typeof ai!=='undefined')?ai:null;
+ // var ai=(typeof ai!=='undefined')?ai:null;
   return new Promise(function(resolve,reject){
     try{
   

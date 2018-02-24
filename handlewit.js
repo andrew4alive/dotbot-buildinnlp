@@ -25,6 +25,7 @@ module.exports=function(psid,msg,ob,resolve,reject,handletext){
   catch(err){
     handletext(psid,msg,resolve,reject);
   }
+  handletext(psid,msg,resolve,reject);
 }
 
 
