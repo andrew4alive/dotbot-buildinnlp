@@ -1,8 +1,8 @@
 var remember={};
-
+var trigger={};
 var m={};
 
-m.save=function(psid,kips,entities){//lips=lis to remeber entities object to remeber
+m.saveentities=function(psid,kips,entities){//kips=lis to remeber entities object to remeber
 var enttemp={};
 var cm=0;
 if(Object.keys(remember).indexOf(psid)>=0){
@@ -20,20 +20,27 @@ if(Object.keys(remember).indexOf(psid)>=0){
   remember[psid]={entities:enttemp,createDate:new Date().getTime()};
 };
 
-m.get=function(psid){
+m.savetrigger=function(psid,triggername){
 
-  if(Object.keys(remember).indexOf(psid)>=0){
-    var re={psid:psid,entities:remember[psid]['entities'],createDate:remember[psid]['createDate']};
-      return  JSON.parse(JSON.stringify(re));
-  }
-  return null;
+  trigger[psid]=triggername;
+  //console.log(trigger);
+};
+
+m.gettrigger=function(psid){
+  return JSON.parse(JSON.stringify(trigger));
+};
+
+m.getremember=function(psid){
+
+
+  return JSON.parse(JSON.stringify(remember));
 
 };
 
 
 m.clear=function(time){
   if(time==undefined)
-    time=2*60*60000;
+   var  time=2*60*60000;
     var ky=Object.keys(remember);    
     var d=new Date().getTime();
     for(var i=0;i<ky.length;i++){

@@ -16,11 +16,11 @@ var set={
 */
 var set={
 
-    keepInMind:['person'],
+    keepinmind:['person'],
     trigger:{
       'ordercoffee':{
-          person:{question:'can i get ur name?'}
-      
+          person:{question:'can i get ur name?'},
+          drink:{question:'what coffe u want?'},
       }
     
     

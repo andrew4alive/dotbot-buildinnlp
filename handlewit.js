@@ -5,31 +5,39 @@ var respond = require('./respondhandler');
 var confidence=0.5;
 
 module.exports=function(psid,msg,ob,resolve,reject,handletext){
-    //  var wr=JSON.parse(JSON.stringify(fbresponselist.wit));
+      var wr=JSON.parse(JSON.stringify(fbresponselist.wit));
   try{
   var wr=fbresponselist.wit;
  
       var entities = wr.entities;
+    //console.log('handliewit');
      // console.log( ob.entities);   
-      var hcA = highconfidenceAll(ob.entities);
+    //console.log(msg);  
+    var hcA = highconfidenceAll(ob.entities);
       //console.log(hcA);
   var match=witmatch(wr,hcA,resolve,reject);
   //   console.log( witmatch(wr,hcA));
   if(match!=null){
     match.wit=true;
+    match.text=msg.text;
      respond(psid,match);
      resolve(false);
      return false;
   }
   }
   catch(err){
+    console.log(err);
     handletext(psid,msg,resolve,reject);
+  //  reject(err);
+    return false;
+    
   }
   handletext(psid,msg,resolve,reject);
 }
 
 
 function witmatch(wr,hcA,resolve,reject){
+  try{
     var result=null;
   var wr = JSON.parse(JSON.stringify(wr));
   var hcA=JSON.parse(JSON.stringify(hcA));
@@ -38,55 +46,97 @@ function witmatch(wr,hcA,resolve,reject){
           var ky1 = Object.keys(hcA);
           var count=0;
           var hcAkyc=Object.keys(hcA).length;
+          var ent={};
           for(var ky in arr){
             if(ky1.indexOf(ky)!=-1){
-                  
-              count=loopmatch(arr[ky],hcA[ky],count);
+                 // console.log(wr[i]);
+              var lv=loopmatch(arr[ky],hcA[ky],count);
+              count=lv.count;
+              if(lv.add==true){
+                ent[ky]=hcA[ky];
+              }
             }
           }/// one object loop
         //  console.log(count,Object.keys(arr).length);
        //   console.log(result,count);
+           
           if(hcAkyc == 0) {
             return null;
           }
           if(count == hcAkyc){ 
-            wr[i].entities= hcA;
+           // console.log('ent',ent);
+            wr[i].entities= ent;
+           // wr[i]=ent;
             return wr[i];
           }
           else if(count == Object.keys(arr).length){
+            
               if(result==null){
                 result=wr[i];
-                result.entities=hcA;
+              // result.entities=hcA;
+                result.entities=ent;
                 result.count=count;
                 continue;
               }
-              var ky=Object.keys(result);
-            if(ky.indexOf('count')&&result.count<count){
+            var ky=Object.keys(result);
+              if(ky.indexOf('count')&&result.count<count){
                 result=wr[i];
-              result.entities=hcA;
-                result.count=count;
+            //  result.entities=hcA;
+                result.entities=ent;
+              //  result.entities=assignE(wr[i],hcA,reject);  
+              result.count=count;
                 continue;
             }
-          
           }
+             
+          
+          
+          
           
       }// full loop
+  //  console.log(count);
+   // console.log(ent);
     if(result!=null)
       delete result.count;
       return result;
+  }catch(err){
+    reject(err);
+    return null;
+  }
 }
-
-
+/* 
+//no use and cannot be use bug
+function assignE(pe,ce,reject){
+    var re={};
+  try{
+    var pekeys=Object.keys(pe);
+    var ce = Object.keys(ce); 
+    for(var ky in pe){
+     re[ky]=ce[ky];
+    
+    }
+  }
+  catch(err){
+    reject(err)
+    //console.log(err);
+  }
+  return re;
+}*/
 function loopmatch(arr,hcA,count){
+  var add=false;
   try{
     if(hcA.confidence>confidence){
-              
+              add=true;
               if(arr.value[0]=='*'){
+               // console.log('all:',arr);
                   count=count+1;
+                //add=true;
               }
               
                else if( arr.value==hcA.value){
-                   count=count+1;
+                // console.log('match value',arr);  
+                 count=count+1;
+                // add=true
                 }
               
            
@@ -95,7 +145,7 @@ function loopmatch(arr,hcA,count){
   catch(err)
   {
   }
-return count;
+return {count:count,add:add};
 }
 
 function highconfidenceAll(entities){

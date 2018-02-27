@@ -5,25 +5,26 @@ var interpole={};
 module.exports=function witrespond(list){
     var ls = JSON.parse(JSON.stringify(list));
 
-  if(Object.keys(list).indexOf('wit')==-1&&Object.keys(list).indexOf('rtext')==-1){
+  if(Object.keys(ls).indexOf('wit')==-1&&Object.keys(ls).indexOf('rtext')==-1){
     console.log('fbrespondlist error');  
     return null;
   }
-  if(Object.keys(list).indexOf('wit')>=0){
+  if(Object.keys(ls).indexOf('wit')>=0){
 
-  var entities=list.entities;
-  var stext=list.stext;
-    console.log('from witrespon d file');
+  var entities=ls.entities;
+  var stext=ls.stext;
+  //  console.log('from witrespond file');
  // console.log(stext);
-   console.log(entities);
+  // console.log(entities);
 
     var sta=findbracket(stext,true);
-   list.stext = replacelist(ls,sta);
+   ls.stext = replacelist(ls,sta);
    // console.log('sta is:');
-    //console.log(sta);
+   // console.log(sta);
     
   }
-  return list;
+ // console.log(ls);
+  return ls;
 }
   
 
