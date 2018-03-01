@@ -5,18 +5,21 @@ var respond = require('./respondhandler');
 var confidence=0.5;
 
 module.exports=function(psid,msg,ob,resolve,reject,handletext){
-      var wr=JSON.parse(JSON.stringify(fbresponselist.wit));
+     
   try{
+  if(Object.keys(fbresponselist).indexOf('wit')!=-1){
+  
+  var wr=JSON.parse(JSON.stringify(fbresponselist.wit));
   var wr=fbresponselist.wit;
  
       var entities = wr.entities;
     //console.log('handliewit');
-     // console.log( ob.entities);   
+      //console.log( ob.entities);   
     //console.log(msg);  
     var hcA = highconfidenceAll(ob.entities);
-      //console.log(hcA);
+     // console.log(hcA);
   var match=witmatch(wr,hcA,resolve,reject);
-  //   console.log( witmatch(wr,hcA));
+     //console.log( witmatch(wr,hcA));
   if(match!=null){
     match.wit=true;
     match.text=msg.text;
@@ -25,8 +28,9 @@ module.exports=function(psid,msg,ob,resolve,reject,handletext){
      return false;
   }
   }
+  }
   catch(err){
-    console.log(err);
+    console.log('error handlie wit',err);
     handletext(psid,msg,resolve,reject);
   //  reject(err);
     return false;
@@ -52,9 +56,10 @@ function witmatch(wr,hcA,resolve,reject){
                  // console.log(wr[i]);
               var lv=loopmatch(arr[ky],hcA[ky],count);
               count=lv.count;
+             /* console.log('lv',lv.add,ky,hcA[ky]);
               if(lv.add==true){
                 ent[ky]=hcA[ky];
-              }
+              }*/
             }
           }/// one object loop
         //  console.log(count,Object.keys(arr).length);
@@ -65,7 +70,7 @@ function witmatch(wr,hcA,resolve,reject){
           }
           if(count == hcAkyc){ 
            // console.log('ent',ent);
-            wr[i].entities= ent;
+            wr[i].entities= hcA;
            // wr[i]=ent;
             return wr[i];
           }
@@ -73,16 +78,16 @@ function witmatch(wr,hcA,resolve,reject){
             
               if(result==null){
                 result=wr[i];
-              // result.entities=hcA;
-                result.entities=ent;
+               result.entities=hcA;
+                //result.entities=ent;
                 result.count=count;
                 continue;
               }
             var ky=Object.keys(result);
               if(ky.indexOf('count')&&result.count<count){
                 result=wr[i];
-            //  result.entities=hcA;
-                result.entities=ent;
+              result.entities=hcA;
+              //  result.entities=ent;
               //  result.entities=assignE(wr[i],hcA,reject);  
               result.count=count;
                 continue;
@@ -122,6 +127,8 @@ function assignE(pe,ce,reject){
   }
   return re;
 }*/
+
+
 function loopmatch(arr,hcA,count){
   var add=false;
   try{
@@ -155,6 +162,8 @@ function highconfidenceAll(entities){
    for (var ky in entities){
         // console.log(ky);
         re[ky] =  highconfidence(entities[ky]) ;
+     if(re[ky]['confidence']<confidence)
+       delete re[ky];
    }
   return re;
 }

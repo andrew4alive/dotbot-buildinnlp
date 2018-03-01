@@ -34,6 +34,8 @@ fn.triggercheck=function(psid,setup,remember,list){
     return null;
   }
   var triggered = setup.trigger[list.fulfill];
+  delete triggered._f;
+   delete triggered._c;
   var tky=Object.keys(triggered);
   var toremember=[];
  // console.log(remember,tky);
@@ -45,7 +47,10 @@ fn.triggercheck=function(psid,setup,remember,list){
     }
     if(Object.keys(remember[psid]).indexOf('entities')==-1){ console.log('remeber[psid] do not have entities keys'); return null;}
     if(Object.keys(remember[psid]['entities']).indexOf(ky)==-1){
-    
+    /*if(ky=='_f')
+      continue;
+      else if(ky=='_c')
+        continue;*/
       toremember.push(ky);
       //continue;
     }
@@ -63,5 +68,53 @@ fn.triggercheck=function(psid,setup,remember,list){
 
 };
 
+fn.memorycheck=function(psid,setup,remember,mymt,list){
+  var toremember=[];
+ // var tosaveentities={};
+  var trigger=null;
+    var list=JSON.parse(JSON.stringify(list));
+  var remember=JSON.parse(JSON.stringify(remember));
+  var trigger=JSON.parse(JSON.stringify(setup.trigger[mymt]));
+  delete trigger._f;
+   delete trigger._c;
+  var trky=Object.keys(trigger);
+  var listkeys=Object.keys(list);
+  for(var i=0;i<trky.length;i++){
+    if(Object.keys(remember[psid]['entities']).indexOf(trky[i])==-1){
+      
+    
+       toremember.push(trky[i]);
+    }
+    
+    
+    
+  }
+  
+  //delete toremember['_f'];
+  return {toremember:toremember,trigger:mymt};
+};
+
+
+
+
+////helper 
+function kycheck(ob,ky){
+  if(!Array.isArray(ky)){
+    return false;
+  }
+ // console.log(ob);
+  if(ob==undefined) return false;
+  var obkc=Object.keys(ob);
+  
+  for(var i=0;i<ky.length;i++ ){
+    if(obkc.indexOf(ky[i])!=-1){
+      continue;
+    }
+    else{
+      return false;
+    }
+  }
+  return true;
+}
 
 module.exports=fn;

@@ -7,7 +7,7 @@ module.exports=function witrespond(list){
 
   if(Object.keys(ls).indexOf('wit')==-1&&Object.keys(ls).indexOf('rtext')==-1){
     console.log('fbrespondlist error');  
-    return null;
+    return ls;
   }
   if(Object.keys(ls).indexOf('wit')>=0){
 
