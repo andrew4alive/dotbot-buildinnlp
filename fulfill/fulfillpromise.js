@@ -1,21 +1,31 @@
-var setup=require('./setup');
-var memory=require('./memory');
-var fn=require('./function');
-var o = {};
 
-//var remember={};
 
-o.remember=function(psid,list){
+
+
+module.exports=function(psid,memoryob){
+  var fn=require('./function');
+  var psid=psid;
+  var memoryp=require('./memorypromise');
+  var memory=memoryp(memoryob);
+  var setup=require('./setup');
+  //console.log('fulfill promise init state',setup);
+  var setup=JSON.parse(JSON.stringify(setup));
+  //console.log('fulfill promise init state 1');
+  var o={} ;
+  o.getele=function(){
+      return memory.getob(psid);
+  };
+o.remember=function(list){
   if(Object.keys(list).indexOf('entities')==-1) return null;
   var entities=JSON.parse(JSON.stringify(list.entities));
-  clearmemory();
+  //clearmemory();
   if(!kycheck(setup,['keepinmind'])) return null;
   var kips=setup.keepinmind;
   memory.saveentities(psid,kips,entities);
 
 };
 
-o.memory=function(psid){
+o.memory=function(){
  // console.log('fulfill/fullfill');
 //  console.log(remember);
   var remember=memory.getremember(psid);
@@ -27,8 +37,8 @@ o.memory=function(psid){
  
 };
 
-o.respond=function(psid,list){
-//  console.log('fulfill/fullfill');
+o.respond=function(list){
+ // console.log('fulfill/fullfill');
  // console.log(list);
   try{
     if(!kycheck(setup,['trigger'])) return list;
@@ -66,7 +76,7 @@ function memorytrigger(psid,list){
   
   //r mymt=null;
   if(Object.keys(mt).indexOf(psid)==-1) return false;// confirm have trigger psid, is trigger poreviusly
-  //console.log('from memory trigger file fulfill/fulfill');
+//  console.log('from memory trigger file fulfill/fulfill');
   //console.log(mt);
   var mymt=mt[psid];//my trigger name from memory
   if(!kycheck(setup.trigger,[mymt])) return false;
@@ -101,9 +111,6 @@ function memorytrigger(psid,list){
   
     
   
-}
-function mergeentities(psid,list,memory){
-    //var remember=memory.
 }
 
 
@@ -140,6 +147,8 @@ function firsttrigger(psid,list,trm){
 
 
 }
+  
+  /*
 function clearmemory(){
   setTimeout(function(){
    // console.log('fulfill/fulfill');
@@ -148,7 +157,7 @@ memory.clear();
     
     } ,0);
 
-}
+}*/
 
 ////helper 
 function kycheck(ob,ky){
@@ -184,8 +193,5 @@ var allrememberentities=function(triggername){
   return re;
 };
 
-
-
-
-
-module.exports=o;
+return o;
+};

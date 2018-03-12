@@ -21,7 +21,7 @@ var set={
       'ordercoffee':{
           person:{question:'can i get ur name?'},
           drink:{question:'what coffe u want?'},
-          '_f':"thank you for order",
+          '_f':"thank you {{person}} for order",
          '_c':'ok, cancel order, what else can i help you'
       }
     

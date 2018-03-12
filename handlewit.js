@@ -14,12 +14,12 @@ module.exports=function(psid,msg,ob,resolve,reject,handletext){
  
       var entities = wr.entities;
     //console.log('handliewit');
-      //console.log( ob.entities);   
+   //   console.log( ob.entities);   
     //console.log(msg);  
     var hcA = highconfidenceAll(ob.entities);
      // console.log(hcA);
   var match=witmatch(wr,hcA,resolve,reject);
-     //console.log( witmatch(wr,hcA));
+ //    console.log( match);
   if(match!=null){
     match.wit=true;
     match.text=msg.text;
