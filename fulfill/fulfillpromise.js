@@ -52,9 +52,11 @@ o.respond=function(list){
   //console.log(allre);
      // memory.saveentities(psid,allre,list.entities);
    trm = fn.triggercheck(psid,setup,memory.getremember(),list);
+      try{
       memory.saveentities(psid,trm.toremember,list.entities);
       trm = fn.triggercheck(psid,setup,memory.getremember(),list);
-    }
+      }catch(err){}
+      }
   //console.log(trm);// sampel trm respond { toremember: [ 'drink' ], trigger: 'ordercoffee' }, trigger null not trigger
   if(trm!=null){
     

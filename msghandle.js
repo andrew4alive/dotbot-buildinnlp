@@ -13,6 +13,7 @@ h.confidence = 0.7;
 var url=process.env.fbmsgurl;
 h.init = function(body,res){
     h.res = res;
+
     body.entry.forEach(function(entry) {
       
       // Get the webhook event. entry.messaging is an array, but 
@@ -26,15 +27,30 @@ h.init = function(body,res){
           h.res.status(200).send('EVENT_RECEIVED');
      
         if(keys.indexOf('is_echo')>=0){
-          
-           // console.log("my reply");
+          //   console.log(entry.messaging[0]);
+            if(Object.keys(webhook_event.message).indexOf('app_id')!=-1){
+           //     console.log('auto reply');
+            }
+          else{
+            var botcontrol=require('./botcontrol/botcontrol.js');
+            botcontrol.init(psid,webhook_event);
+          //  console.log("human reply");
+          }
         }
         else{
          
           //console.log(webhook_event.message.nlp.entities);
       //console.log('end ori');
-          h.handle(psid,webhook_event.message);
-        //  mgdt.insert("massage",entry);
+          var botcontrol=require('./botcontrol/botcontrol.js');
+          botcontrol.botisoff(psid).then(function(ob){
+            //console.log('from msghandle');
+           // console.log('line 47');
+          //  console.log(ob);
+            if(ob==false){
+            h.handle(psid,webhook_event.message);
+            }
+          });
+         
         }
       }
     });
@@ -60,7 +76,7 @@ h.handle=function(psid,msg){
   }
     
     
-    },1500);
+    },500);
 
   
   });

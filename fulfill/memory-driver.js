@@ -1,8 +1,3 @@
-
-
-
-
-
 var lastconversation={};
 var remember={};
 var trigger={};
@@ -54,13 +49,8 @@ return new Promise(function(resolve,reject){
 },
   end:function(psid,mm){
     //console.log(this.ty);
-    if(this.ty==undefined){
-    if(Object.keys(mm.lastconversation).indexOf(psid)!=-1)
-  lastconversation[psid]=mm.lastconversation[psid];
-    if(Object.keys(mm.remember).indexOf(psid)!=-1)
-      remember[psid]=mm.remember[psid];
-    if(Object.keys(mm.trigger).indexOf(psid)!=-1)
-    trigger[psid]=mm.trigger[psid];
+    if(this.ty==null){
+      inmemorydelete(psid,mm);
       return;
     }
     if(this.ty='mongodb'){
@@ -153,6 +143,26 @@ function  inmemoryObget(psid,resolve,reject){
     re['trigger']={};
   resolve(re);
   return re;
+}
+
+function inmemorydelete(psid,mm){
+ if(Object.keys(mm.lastconversation).indexOf(psid)!=-1)
+          lastconversation[psid]=mm.lastconversation[psid];
+      else
+        delete lastconversation[psid];
+    if(Object.keys(mm.remember).indexOf(psid)!=-1)
+      remember[psid]=mm.remember[psid];
+      else
+      delete  remember[psid];
+      
+    if(Object.keys(mm.trigger).indexOf(psid)!=-1)
+      trigger[psid]=mm.trigger[psid];
+    else
+        delete trigger[psid];
+      return;
+
+
+
 }
 //copy to new file
 /*

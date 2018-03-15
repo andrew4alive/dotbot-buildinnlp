@@ -32,6 +32,17 @@ reply.typing=function(url,psid){
  });
 };
 
+reply.typingoff=function(url,psid){
+    return new Promise(function(resolve,reject){
+  var request_body = {
+    "recipient": {
+      "id": psid
+    },
+    "sender_action":"typing_off"
+  };
+  postresthen(url,request_body,resolve,reject);
+ });
+};
 
 
 //helper 

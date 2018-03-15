@@ -14,10 +14,10 @@ list={ entities: { greetings: { confidence: 0.99993050098374, value: 'true' } },
 
 module.exports = function(psid,list){
    var plist=JSON.parse(JSON.stringify(list));
-//  memorydriver.ty='mongodb';
+   //memorydriver.ty='mongodb';
 
   memorydriver.init(psid).then(function(memoryob){
-    console.log('memorydriver callback');
+    //console.log('memorydriver callback');
     
     //console.log(memoryob);
     var fn=fulfillpromise(psid,memoryob);
@@ -29,7 +29,7 @@ module.exports = function(psid,list){
     
     var remember={};
     try{
-      console.log(ele.remember[psid].entities);
+    //  console.log(ele.remember[psid].entities);
     var rememer=ele.remember[psid].entities;
     }
     catch(err){
@@ -100,6 +100,8 @@ function send(psid,plist){
           replyfb.withtext(url,psid,plist.defaultres);
           
       }
+  
+  replyfb.typingoff(url,psid);
 
 
 }
