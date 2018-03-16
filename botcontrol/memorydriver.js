@@ -1,3 +1,4 @@
+var md=require('./mongodriver');
 var botoff={};
 
 var m={};
@@ -16,15 +17,21 @@ module.exports={
           inmemoryget.call(self,psid,resolve,reject);
          return ;
        }
+     if(self.ty=='mongodb'){
+          md.get.call(self,psid,resolve,reject);        
+        }
    });
    
  },
   deletebotoff:function(psid){
    var self=this;
-    new Promise(function(resolve,reject){
+   return new Promise(function(resolve,reject){
         if(self.ty==null){
          inmemorydelete(psid,resolve,reject);
-        
+         return;
+        }
+      if(self.ty=='mongodb'){
+          md.delete.call(self,psid,resolve,reject);        
         }
     });
   },
@@ -34,6 +41,9 @@ savebotoff:function(psid){
       if(self.ty==null){
         inmemorysave.call(self,psid,resolve,reject);
       }
+        if(self.ty=='mongodb'){
+          md.save.call(self,psid,resolve,reject);        
+        }
 
     });
 
