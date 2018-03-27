@@ -49,15 +49,27 @@ return new Promise(function(resolve,reject){
 },
   end:function(psid,mm){
     //console.log(this.ty);
-    if(this.ty==null){
-      inmemorydelete(psid,mm);
+    var self=this;
+    return new Promise(function(resolve,reject){
+    if(self.ty==null){
+      inmemoryset(psid,mm,resolve,reject);
+      return;
+    }
+    if(self.ty='mongodb'){
+      //var self=this;
+      var mongodriver=require('./mongo-driver');
+       mongodriver.mongomemoryset.call(self,psid,mm,resolve,reject);
+       }
+    }); 
+   /* if(this.ty==null){
+      inmemoryset(psid,mm);
       return;
     }
     if(this.ty='mongodb'){
       var self=this;
       var mongodriver=require('./mongo-driver');
        mongodriver.mongomemoryset.call(self,psid,mm);
-       }
+       }*/
   },
   memoryclear:function(time,cb){
    if(typeof cb!='function'){
@@ -145,7 +157,8 @@ function  inmemoryObget(psid,resolve,reject){
   return re;
 }
 
-function inmemorydelete(psid,mm){
+function inmemoryset(psid,mm,resolve,reject){
+  try{
  if(Object.keys(mm.lastconversation).indexOf(psid)!=-1)
           lastconversation[psid]=mm.lastconversation[psid];
       else
@@ -159,7 +172,12 @@ function inmemorydelete(psid,mm){
       trigger[psid]=mm.trigger[psid];
     else
         delete trigger[psid];
-      return;
+     
+  resolve(true);
+  }catch(err){
+    reject( false);
+  }
+  return true;
 
 
 

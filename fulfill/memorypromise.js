@@ -1,5 +1,3 @@
-
-
 module.exports=function(mm){//return all function
   var lastconversation=mm.lastconversation;
 var remember=mm.remember;
@@ -12,7 +10,7 @@ var m1={};
    re['lastconversation']=lastconversation;
    re['remember']=remember;
     re['trigger']=trigger;
-    return re;
+    return JSON.parse(JSON.stringify(re));
   };
 
 m1.saveentities=function(psid,kips,entities){//kips=lis to remeber entities object to remeber
@@ -29,16 +27,42 @@ if(Object.keys(remember).indexOf(psid)>=0){
   }
     for(var i=0;i<kips.length;i++){
   if(Object.keys(entities).indexOf(kips[i])>=0){ 
-    if(!Array.isArray(entities[kips[i]])){// to check do is the entities process using wit hcA function, will return object not arrauy
+    if(!Array.isArray(entities[kips[i]])){// to check do is the entities process using wit hcA function, will return object not array
+     //  console.log('save');
+      //console.log(entities[kips[i]]);
       enttemp[kips[i]]=entities[kips[i]];
     cm=cm+1;   
     }
   }
   }
- 
+// console.log(cm);
   if(cm>=1)
   remember[psid]={entities:enttemp,createDate:new Date().getTime()};
 };
+  
+m1.deleteentity=function(psid,kips){  //not tested
+  if(!Array.isArray(kips)) return null;
+  if(psid==null||psid==undefined) return null;
+  var ri=JSON.parse(JSON.stringify(remember));
+  var ent=null;
+   if(Object.keys(ri).indexOf(psid)!=-1){
+       if(Object.keys(ri[psid]).indexOf('entities')!=-1){
+         ent = ri[psid]['entities'];
+         
+       } 
+   }
+  if(ent==null) return null;
+  for(var i=0;i<kips.length;i++){
+      if(Object.keys(ent).indexOf(kips[i])!=-1){
+          delete ent[psid]['entities'][kips[i]];
+      }
+  }
+}; 
+  
+m1.deleteallentity=function(psid){
+  delete remember[psid];
+}; 
+
 
 m1.savetrigger=function(psid,triggername){
 

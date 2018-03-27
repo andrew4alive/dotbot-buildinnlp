@@ -1,12 +1,13 @@
 var bs=require('./setup.js');
 var memorydriver=require('./memorydriver');
 var m={};
+memorydriver.ty='mongodb';
 m.cleartime=5*60000//in miliscond
 m.init=function(psid,msg){
 //  console.log('from botcontrol/botcontron file init method');
  // console.log(msg);
   if(Object.keys(bs).indexOf('himode')==-1) return;
-  memorydriver.ty='mongodb';
+ // memorydriver.ty='mongodb';
   if(bs.himode==true){
    //  console.log('turn off bot');
       botexe(psid,msg);   

@@ -1,15 +1,9 @@
 var interpole={};
  interpole.start='{{';
  interpole.end='}}';
-
 module.exports=function witrespond(list){
     var ls = JSON.parse(JSON.stringify(list));
 
-  if(Object.keys(ls).indexOf('wit')==-1&&Object.keys(ls).indexOf('rtext')==-1){
-    console.log('fbrespondlist error');  
-    return ls;
-  }
-  if(Object.keys(ls).indexOf('wit')>=0){
 
   var entities=ls.entities;
   var stext=ls.stext;
@@ -22,11 +16,11 @@ module.exports=function witrespond(list){
    // console.log('sta is:');
    // console.log(sta);
     
-  }
+ // }
  // console.log(ls);
   return ls;
-}
-  
+};
+ 
 
 function findbracket(stext,unique){
    var rest='\{\{(([^\{][^\{]*)|([^\}][^\}]*))\}\}';
@@ -74,20 +68,7 @@ function replacelist(list,bracket){
     else{  b1.push(bracket[i]); }
     
   }
-  /*
-  var bracket=JSON.parse(JSON.stringify(b1));
-  var b1=[];
-    for(var i=0;i<bracket.length;i++){
-      var m=bracket[i].slice(2,bracket[i].length-2);
-      
-    
-     // var reg=new RegExp('\{\{(([^\{][^\{]*)|([^\}][^\}]*))\}\}','g');
-     // ls.stext =   ls.stext.replace(bracket[i],m);
-      if(m.match(/[\{]{2,}/g)==null&&m.match(/[\}]{2,}/g)==null)
-        ls.stext =   ls.stext.replace(bracket[i],m);
-      else{b1.push(bracket[i]);}
-  } 
-  */
+
     var bracket=JSON.parse(JSON.stringify(b1));
   var b1=[];
     for(var i=0;i<bracket.length;i++){

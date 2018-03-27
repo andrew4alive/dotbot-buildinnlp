@@ -18,10 +18,10 @@ var textlist=require('./reslist/textres');
 
 
   var res={
-//  defaultres:"sorry , i cant understand your request",
+  defaultres:"sorry , i cant understand your request",
   list:textlist,
- wit:witres
-
+  wit:witres
 };
+
 
 module.exports=JSON.parse(JSON.stringify(res));

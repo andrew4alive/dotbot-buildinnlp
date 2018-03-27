@@ -35,7 +35,7 @@ var self=this;
   });
 
 };
-
+/*
 m.save=function(psid,resolve,reject){
 var self=this;
   
@@ -67,7 +67,7 @@ var self=this;
   });
 
 };
-
+*/
 m.delete=function(psid,resolve,reject){
     var self=this;
   
@@ -75,7 +75,7 @@ m.delete=function(psid,resolve,reject){
   if(err)  reject(err);
   var dbo=db.db(m.db);
     dbo.collection(m.collection).remove({psid:psid},function(err,result){
-      if(err) reject({psid:psid});
+      if(err) {reject({psid:psid});return ;}
         resolve({psid:psid});
     });
   

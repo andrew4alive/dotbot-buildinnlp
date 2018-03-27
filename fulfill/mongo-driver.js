@@ -11,7 +11,7 @@ mm.mongomemoryget=function(psid,resolve,reject){
   var self=this;
   var dbo=dbo;
   var db=db;
-  console.log('from fulfill/mongo-dri');
+  //console.log('from fulfill/mongo-dri');
   
    if(url==''){
      reject('mongourl not set');
@@ -24,6 +24,7 @@ mm.mongomemoryget=function(psid,resolve,reject){
    mongo.connect(url,function(err,db){
     // console.log('mongo get function');
        if(err){
+       //  console.log('cant connect mongodb');
        reject(err);  
          throw(err);
        }
@@ -77,21 +78,21 @@ mm.mongomemoryget=function(psid,resolve,reject){
 
 
 
-mm.mongomemoryset=function(psid,mm){
+mm.mongomemoryset=function(psid,mm,resolve,reject){
     var mongo=require('mongodb').MongoClient;
     var url=process.env.mongourl;
   var self=this;
    if(url==''){
-    // reject('mongourl not set');
+    reject('mongourl not set');
      throw('mongourl not set');
    }
    if(url==undefined){
-    // reject('mongourl not set');
+     reject('mongourl not set');
      throw('mongourl not set');
    }
    mongo.connect(url,function(err,db){
        if(err){
-      // reject(err);  
+       reject(err);  
          throw(err);
        }
       else{
@@ -110,10 +111,19 @@ mm.mongomemoryset=function(psid,mm){
             // console.log(inob);
               var n={
                 $set:inob,
-                $unset:unob
+               // $unset:unob
               };
+              
+             
+              if(Object.keys(unob).length>0){
+                  n['$unset']=unob
+              }
+             // console.log(n);
               dbo.collection(self.collection).updateOne({psid:psid},n,function(err,res){
               // console.log('mongodb save uodate');
+                if(err) reject(err);
+                
+                resolve(true);
                 db.close();
               
               });
@@ -126,12 +136,14 @@ mm.mongomemoryset=function(psid,mm){
               }; 
               qr(inob);
               dbo.collection(self.collection).insertOne(inob,function(err,res){
-                  if(err)
-                    console.log('fail to save memory');
+                   if(err) reject(err);
+                
+                resolve(true);
                 db.close();
               });
           
           }
+         // reject(null);
          //end chat memory
         });
       
@@ -161,16 +173,16 @@ mm.mongomemoryset=function(psid,mm){
      var inob=ori;
         if(Object.keys(mm).indexOf('lastconversation')!=-1){
               if(Object.keys(mm.lastconversation).indexOf(psid)==-1)
-                 inob.lastconversation={};
+                 inob.lastconversation="";
                } 
             
                if(Object.keys(mm).indexOf('remember')!=-1){
                   if(Object.keys(mm.remember).indexOf(psid)==-1)
-                 inob.remember={};
+                 inob.remember="";
                } 
                if(Object.keys(mm).indexOf('trigger')!=-1){
                  if(Object.keys(mm.trigger).indexOf(psid)==-1)
-                 inob.trigger={};
+                 inob.trigger="";
                } 
   }
 }

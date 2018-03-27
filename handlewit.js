@@ -1,23 +1,31 @@
 var fbresponselist = require('./fbresponselist');
 
 var respond = require('./respondhandler');
-
+var hcah=require('./core/hca.js');
 var confidence=0.5;
 
 module.exports=function(psid,msg,ob,resolve,reject,handletext){
-     
   try{
+  var hcA = highconfidenceAll(ob.entities);
+  msg.entities=hcA;
+  }catch(err){
+  msg.entities={};
+  }
+  
+  try{
+  //  console.log('start handlewit');
   if(Object.keys(fbresponselist).indexOf('wit')!=-1){
   
   var wr=JSON.parse(JSON.stringify(fbresponselist.wit));
   var wr=fbresponselist.wit;
- 
+  //  console.log(JSON.stringify(fbresponselist));
       var entities = wr.entities;
-    //console.log('handliewit');
-   //   console.log( ob.entities);   
+   // console.log('handliewit');
+     // console.log( ob.entities);   
     //console.log(msg);  
+  //  var hcA = highconfidenceAll(ob.entities);
     var hcA = highconfidenceAll(ob.entities);
-     // console.log(hcA);
+    //  console.log(hcA);
   var match=witmatch(wr,hcA,resolve,reject);
  //    console.log( match);
   if(match!=null){
@@ -40,7 +48,7 @@ module.exports=function(psid,msg,ob,resolve,reject,handletext){
 }
 
 
-function witmatch(wr,hcA,resolve,reject){
+function witmatch(wr,hcA,resolve,reject){//wr is base on setting
   try{
     var result=null;
   var wr = JSON.parse(JSON.stringify(wr));
@@ -68,27 +76,29 @@ function witmatch(wr,hcA,resolve,reject){
           if(hcAkyc == 0) {
             return null;
           }
-          if(count == hcAkyc){ 
+        /*  if(count == hcAkyc&&Object.keys(arr).length==hcAkyc){ 
+          //  console.log('by equal');
            // console.log('ent',ent);
             wr[i].entities= hcA;
            // wr[i]=ent;
             return wr[i];
           }
-          else if(count == Object.keys(arr).length){
-            
+          else*/ if(count == Object.keys(arr).length){
+               //  console.log('by logic');
               if(result==null){
+               // console.log('by logic 1');
                 result=wr[i];
                result.entities=hcA;
-                //result.entities=ent;
+              
                 result.count=count;
                 continue;
               }
             var ky=Object.keys(result);
               if(ky.indexOf('count')&&result.count<count){
+                //console.log('by logic 2');
                 result=wr[i];
               result.entities=hcA;
-              //  result.entities=ent;
-              //  result.entities=assignE(wr[i],hcA,reject);  
+         
               result.count=count;
                 continue;
             }

@@ -118,3 +118,10 @@ function kycheck(ob,ky){
 }
 
 module.exports=fn;
+
+
+function dmkey(ob){//key to delete _f,_c
+  if(ob==null&&typeof ob !='object'){
+     
+  }
+}

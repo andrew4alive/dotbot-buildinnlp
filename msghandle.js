@@ -1,4 +1,4 @@
-var replyfb= require('./replyfb.js');
+var replyfb= require('./replyfb/replyfb.js');
 var mgdt= require('./mongodata.js');
 
 var fbresponselist = require('./fbresponselist');
@@ -18,10 +18,11 @@ h.init = function(body,res){
       
       // Get the webhook event. entry.messaging is an array, but 
       // will only ever contain one event, so we get index 0
+     // console.log(entry);
+      if(Object.keys(entry).indexOf('messaging')==-1) return ;
       let webhook_event = entry.messaging[0];
        var psid = webhook_event.sender.id;
-    //  console.log(webhook_event);
-      
+  //  console.log(webhook_event);
       if (webhook_event.message) {
         var keys = Object.keys(webhook_event.message);
           h.res.status(200).send('EVENT_RECEIVED');
@@ -38,20 +39,25 @@ h.init = function(body,res){
           }
         }
         else{
-         
+         //console.log(webhook_event);
           //console.log(webhook_event.message.nlp.entities);
-      //console.log('end ori');
+     // console.log('end ori');
           var botcontrol=require('./botcontrol/botcontrol.js');
           botcontrol.botisoff(psid).then(function(ob){
-            //console.log('from msghandle');
-           // console.log('line 47');
-          //  console.log(ob);
+
             if(ob==false){
             h.handle(psid,webhook_event.message);
             }
           });
          
         }
+      }
+      else if (webhook_event.postback) {
+        h.res.status(200).send('EVENT_RECEIVED');
+    //     console.log(webhook_event);
+     // console.log('postback trigger');
+        var handle=require('./handlepostback/handlepostback').init(psid,webhook_event.postback);
+      
       }
     });
 };
@@ -105,80 +111,5 @@ function handle(psid,msg,ai){
   });
     
 }
-/*
-function handlewit(psid,msg,ob,resolve,reject){
-      var wr=fbresponselist.wit;
-      var entities = wr.entities;
-      //console.log( ob.entities);   
-      var hcA = highconfidenceAll(ob.entities);
-      console.log(hcA);
-  var match=witmatch(wr,hcA);
-     console.log( witmatch(wr,hcA));
-     respond(psid,match);
-     resolve(false);
-     return false;
- 
-    handletext(psid,msg,resolve,reject);
-}
 
-
-////helper
-function witmatch(wr,hcA){
-    var result=null;
-        for(var i=0;i<wr.length;i++){
-          var arr = wr[i].entities;
-          var ky1 = Object.keys(hcA);
-          var count=0;
-          var hcAkyc=Object.keys(hcA).length;
-          for(var ky in arr){
-            if(ky1.indexOf(ky)!=-1){
-              if(arr[ky].value==hcA[ky].value){
-                if( hcA[ky].confidence>h.confidence){
-                   count=count+1;
-                }
-              }
-            }
-          }/// one object loop
-          if(count == hcAkyc) return wr[i];
-          
-          else if(result==null){
-            result=wr[i];
-            result.count=count;
-          }
-          else if(result.count<count){
-              result=wr[i];
-            result.count=count;
-          }
-          
-      }// full loop
-      delete result.count;
-      return result;
-}
-
-
-function highconfidenceAll(entities){
-   // console.log(entities);
-  var re ={};
-   for (var ky in entities){
-        // console.log(ky);
-        re[ky] =  highconfidence(entities[ky]) ;
-   }
-  return re;
-}
-
-function highconfidence(entity){
-  var he={};
-    entity.forEach(function(ob){
-      var ky=Object.keys(he);
-      if(ky.indexOf('confidence')==-1){
-        he=ob;
-        return;
-      }
-      if(ob.confidence>he.confidence){
-        he=ob;
-      }
-    });
-  return he;
-}
-*/
 module.exports=h;

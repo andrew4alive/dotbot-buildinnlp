@@ -8,6 +8,7 @@ module.exports=function(psid,memoryob){
   var memoryp=require('./memorypromise');
   var memory=memoryp(memoryob);
   var setup=require('./setup');
+  var t_fc=null;
   //console.log('fulfill promise init state',setup);
   var setup=JSON.parse(JSON.stringify(setup));
   //console.log('fulfill promise init state 1');
@@ -36,6 +37,13 @@ o.memory=function(){
   return null;
  
 };
+  
+o.end=function(){
+  if(t_fc=='_c'||t_fc=='_f'){
+    //console.log('delete remember');
+    memory.deleteallentity(psid);
+  }
+}
 
 o.respond=function(list){
  // console.log('fulfill/fullfill');
@@ -47,11 +55,9 @@ o.respond=function(list){
   var list=JSON.parse(JSON.stringify(list));
     var trm=null;
     if(Object.keys(list).indexOf('fulfill')!=-1){
-     // var allre=allrememberentities(list.fulfill);
-     //if(allre==false) return false;
-  //console.log(allre);
-     // memory.saveentities(psid,allre,list.entities);
+
    trm = fn.triggercheck(psid,setup,memory.getremember(),list);
+     // console.log(trm);
       try{
       memory.saveentities(psid,trm.toremember,list.entities);
       trm = fn.triggercheck(psid,setup,memory.getremember(),list);
@@ -75,8 +81,7 @@ o.respond=function(list){
 
 function memorytrigger(psid,list){
   var mt = memory.gettrigger();
-  
-  //r mymt=null;
+
   if(Object.keys(mt).indexOf(psid)==-1) return false;// confirm have trigger psid, is trigger poreviusly
 //  console.log('from memory trigger file fulfill/fulfill');
   //console.log(mt);
@@ -85,6 +90,7 @@ function memorytrigger(psid,list){
   var triggerentities=JSON.parse(JSON.stringify(setup.trigger[mymt]));
   var entities=JSON.parse(JSON.stringify(list.entities));
   var allre=allrememberentities(mymt);
+  //console.log(allre);
   memory.saveentities(psid,allre,list.entities);
     if(!kycheck(setup.trigger[mymt],['_f'])){
       console.log('do not have _f field in setup');
@@ -95,6 +101,7 @@ function memorytrigger(psid,list){
     //console.log('cancel trigger');
     list.stext=setup.trigger[mymt]['_c'];
     memory.deletetrigger(psid);
+     t_fc='_c';
     return ;
     }
     
@@ -105,6 +112,7 @@ function memorytrigger(psid,list){
     //fullfill
     memory.deletetrigger(psid);
     list.stext=setup.trigger[mymt]['_f'];
+    t_fc='_f';
   }
   else{
     list.stext=setup.trigger[mymt][trm.toremember[0]]['question'];
@@ -124,9 +132,10 @@ function firsttrigger(psid,list,trm){
   }
     if(toask.length==0){
       list.stext=setup.trigger[trm.trigger]['_f'];
+      t_fc='_f';
        return null;
     }
-    //if(Object.keys(trm))
+  
     try{
      // var allre=allrememberentities(trm.trigger);
     memory.savetrigger(psid,trm.trigger);//save trigger 
@@ -150,16 +159,7 @@ function firsttrigger(psid,list,trm){
 
 }
   
-  /*
-function clearmemory(){
-  setTimeout(function(){
-   // console.log('fulfill/fulfill');
-  //  console.log(new Date(1*60000).getTime());
-memory.clear();
-    
-    } ,0);
 
-}*/
 
 ////helper 
 function kycheck(ob,ky){

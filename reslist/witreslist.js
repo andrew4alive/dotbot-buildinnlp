@@ -15,34 +15,6 @@ module.exports=[
 
   var res=[
 
-  { "entities":
-                { 
-                    'greetings':{value:'true'} 
-                } 
-          ,
-       stext:'hello, what can ai can help u with? '
-  },
-   { "entities":
-                { 
-                    'greetings':{value:'true'} ,intent:{value:'order:coffee'}
-                } 
-          ,fulfill:'ordercoffee',
-       stext:'hello, what kind of coffee you want?{{order:coffee}} '
-  },
-     { "entities":
-                { 
-                    intent:{value:'order:coffee'}
-                } 
-          ,
-       stext:'you {{{{}}intent{{}}}} is {{intent}}'+'\n'+'what kind of coffee you want? '
-  },
-  { "entities":
-                { 
-                    intent:{value:['*']}
-                } 
-          ,
-       stext:'you {{{{}}intent{{}}}} is {{intent}}'
-  },
     
     { "entities":
                 { 
@@ -51,24 +23,28 @@ module.exports=[
           ,
        stext:'you {{{{}}intent{{}}}} is {{intent}},value is {{person}}'
   },
-  
-    
-    //good bye
+    //postback
     {
       "entities":{
-        'greetings':{value:['*']},
-        'bye':{value:['*']}
-      },
-      stext:'see you'
+       intent:{
+        value:"postback:order:coffee"
+       },
+        drink:{value:['*']}
+        
     },
-       {
-      "entities":{
-        'bye':{value:['*']}
-      },
-      stext:'see you'
-    }
+     stext:"1 {{drink}} coming up" 
+      
+    
+    },
+    
+
   
   
 ];
+
+var add=require('../setuploader')();
+add.init(res,__dirname+'/wlist');
+add.add('index');
+add.add('order');
 
 module.exports=res;
