@@ -8,12 +8,11 @@ var handletext=require('./handletext');
 var handlewit=require('./handlewit');
 
 var h ={};
-h.res = null;
-h.confidence = 0.7;
+
 var url=process.env.fbmsgurl;
 h.init = function(body,res){
-    h.res = res;
-
+    var res = res;
+    
     body.entry.forEach(function(entry) {
       
       // Get the webhook event. entry.messaging is an array, but 
@@ -25,7 +24,7 @@ h.init = function(body,res){
   //  console.log(webhook_event);
       if (webhook_event.message) {
         var keys = Object.keys(webhook_event.message);
-          h.res.status(200).send('EVENT_RECEIVED');
+          res.status(200).send('EVENT_RECEIVED');
      
         if(keys.indexOf('is_echo')>=0){
           //   console.log(entry.messaging[0]);
@@ -53,7 +52,7 @@ h.init = function(body,res){
         }
       }
       else if (webhook_event.postback) {
-        h.res.status(200).send('EVENT_RECEIVED');
+        res.status(200).send('EVENT_RECEIVED');
     //     console.log(webhook_event);
      // console.log('postback trigger');
         var handle=require('./handlepostback/handlepostback').init(psid,webhook_event.postback);

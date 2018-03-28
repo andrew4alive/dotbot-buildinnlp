@@ -34,8 +34,8 @@ fn.triggercheck=function(psid,setup,remember,list){
     return null;
   }
   var triggered = setup.trigger[list.fulfill];
-  delete triggered._f;
-   delete triggered._c;
+  beforesetup(triggered);
+
   var tky=Object.keys(triggered);
   var toremember=[];
  // console.log(remember,tky);
@@ -75,8 +75,7 @@ fn.memorycheck=function(psid,setup,remember,mymt,list){
     var list=JSON.parse(JSON.stringify(list));
   var remember=JSON.parse(JSON.stringify(remember));
   var trigger=JSON.parse(JSON.stringify(setup.trigger[mymt]));
-  delete trigger._f;
-   delete trigger._c;
+   beforesetup(trigger);
   var trky=Object.keys(trigger);
   var listkeys=Object.keys(list);
   for(var i=0;i<trky.length;i++){
@@ -119,7 +118,13 @@ function kycheck(ob,ky){
 
 module.exports=fn;
 
-
+function beforesetup(ob){
+ if(ob!=null&&typeof ob =='object'){
+     delete ob._f;
+     delete ob._c;
+     delete ob._od;
+  }
+}
 function dmkey(ob){//key to delete _f,_c
   if(ob==null&&typeof ob !='object'){
      

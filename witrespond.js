@@ -2,9 +2,11 @@ var interpole={};
  interpole.start='{{';
  interpole.end='}}';
 module.exports=function witrespond(list){
+  if(list==null&&typeof list!='object') return list;
     var ls = JSON.parse(JSON.stringify(list));
 
-
+if(Object.keys(ls).indexOf('entities')==-1) return ls;
+  if(Object.keys(ls).indexOf('stext')==-1) return ls;
   var entities=ls.entities;
   var stext=ls.stext;
   //  console.log('from witrespond file');

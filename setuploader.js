@@ -6,7 +6,7 @@ module.exports=function(){
   m.path=null;
   var init=false;
   m.init=function(ori,path){
-   if(ori!=null&&Array.isArray(ori))
+   if(ori!=null)
     m.ori=ori;
     else  return false;
     if(typeof path=='string')
@@ -21,7 +21,37 @@ module.exports=function(){
    console.log('setup  loader init');
      return false;
    }
- //  if(init==false) {console.log('must init setuploader');return false;} 
+ 
+    if(Array.isArray(m.ori)) {
+      ar(m,li);
+      return;
+    }
+     if(typeof m.ori=='object'){
+      ob(m,li)
+       return;  
+     }
+  };
+  
+  return m;
+}
+
+
+function ob(m,li){
+  try{
+    var li=m.path+'/'+li;
+    var mo=require(li);
+    if(mo!=null&&typeof mo=='object'){
+      if(!Array.isArray(mo)){
+      Object.assign(m.ori,mo);
+      }
+    }
+  }
+  catch(err){
+ 
+  }
+}
+
+function ar(m,li){
    try{
       var li=m.path+'/'+li;
        var mo=require(li);
@@ -30,8 +60,7 @@ module.exports=function(){
         for(var i in mo){
           m.ori.push(mo[i]);
         }
-     //   m.ori=m.ori+mo;
-       //  console.log(m.ori);
+
       }
      else if(mo!=null&&typeof mo=='object'){
         m.ori.push(mo);
@@ -43,8 +72,5 @@ module.exports=function(){
    }
   catch(err){
     return false;
-    }
-  };
-  
-  return m;
+  }
 }
