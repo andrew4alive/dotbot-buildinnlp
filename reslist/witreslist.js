@@ -13,38 +13,13 @@ module.exports=[
 */
 
 
-  var res=[
-
-    
-    { "entities":
-                { 
-                    intent:{value:'getname'},person:{value:['*']}
-                } 
-          ,
-       stext:'you {{{{}}intent{{}}}} is {{intent}},value is {{person}}'
-  },
-    //postback
-    {
-      "entities":{
-       intent:{
-        value:"postback:order:coffee"
-       },
-        drink:{value:['*']}
-        
-    },
-     stext:"1 {{drink}} coming up" 
-      
-    
-    },
-    
-
-  
-  
-];
-
+var res=[];
 var add=require('../setuploader')();
 add.init(res,__dirname+'/wlist');
-add.add('index');
-add.add('order');
-
-module.exports=res;
+//add.add('index');
+//add.add('order');
+add.addp('index');
+add.addp('order');
+//console.log(add);
+module.exports=add;
+//module.exports=res;

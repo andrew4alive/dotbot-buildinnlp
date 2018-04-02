@@ -12,6 +12,8 @@ module.exports=function(psid,memoryob){
   //console.log('fulfill promise init state',setup);
   var setup=JSON.parse(JSON.stringify(setup));
   //console.log('fulfill promise init state 1');
+  if(!kycheck(setup,['trigger','keepinmind'])) return null;
+  if(!Array.isArray(setup.keepinmind)) return null;
   var o={} ;
   o.getele=function(){
       return memory.getob(psid);
@@ -20,7 +22,6 @@ o.remember=function(list){
   if(Object.keys(list).indexOf('entities')==-1) return null;
   var entities=JSON.parse(JSON.stringify(list.entities));
   //clearmemory();
-  if(!kycheck(setup,['keepinmind'])) return null;
   var kips=setup.keepinmind;
   memory.saveentities(psid,kips,entities);
 
@@ -40,8 +41,23 @@ o.memory=function(){
   
 o.end=function(){
   if(t_fc=='_c'||t_fc=='_f'){
-    //console.log('delete remember');
-    memory.deleteallentity(psid);
+     var tremp=o.getele();
+    if(!kycheck(tremp,['trigger'])) return;
+    if(!kycheck(tremp['trigger'],[psid])) return;
+    var tr=tremp['trigger'][psid];
+    var kips=setup['keepinmind'];
+    var tky=Object.keys(setup['trigger'][tr]);
+   // console.log(tky,kips);
+    for(var i =0;i <kips.length;i++){
+      var t=tky.indexOf(kips[i]);
+      if(t!=-1){
+         tky.splice(t,1);
+      }
+    }
+   // console.log(tky,kips);
+    memory.deleteentity(psid,tky);
+    //memory.deleteallentity(psid);
+    memory.deletetrigger(psid);
   }
 }
 
@@ -49,7 +65,7 @@ o.respond=function(list){
  // console.log('fulfill/fullfill');
  // console.log(list);
   try{
-    if(!kycheck(setup,['trigger'])) return list;
+   
     if(!kycheck(list,['entities'])) return list; 
   
   var list=JSON.parse(JSON.stringify(list));
@@ -100,7 +116,7 @@ function memorytrigger(psid,list){
     if(kycheck(list.entities,['cancel'])){
     //console.log('cancel trigger');
     list.stext=setup.trigger[mymt]['_c'];
-    memory.deletetrigger(psid);
+  //  memory.deletetrigger(psid);
      t_fc='_c';
     return ;
     }
@@ -110,7 +126,7 @@ function memorytrigger(psid,list){
   //console.log(trm);
   if(trm.toremember.length==0){
     //fullfill
-    memory.deletetrigger(psid);
+  //  memory.deletetrigger(psid);
     list.stext=setup.trigger[mymt]['_f'];
     t_fc='_f';
   }

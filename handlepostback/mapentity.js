@@ -8,10 +8,7 @@ var map={
     intent:{
         value:'postback:order:coffee'
       
-    }  ,
-    greetings:{
-        value:true
-    }
+    }  
   },
   drink_americano:{
       postback_drink:{

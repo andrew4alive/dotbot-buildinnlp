@@ -39,13 +39,20 @@ var r=[
          //
      }
      },
-   /* { "entities":
-                { 
-                    intent:{value:['*']}
-                } 
-          ,
-       stext:'you {{{{}}intent{{}}}} is {{intent}}'
-  },*/
+      //postback
+    {
+      "entities":{
+       intent:{
+        value:"postback:order:coffee"
+       },
+        postback_drink:{value:['*']}
+        
+    },
+     stext:"1 {{postback_drink}} coming up" 
+      
+    
+    },
+    
 ];
 
 module.exports=r;

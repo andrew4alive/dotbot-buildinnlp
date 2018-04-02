@@ -16,11 +16,11 @@ module.exports = function(psid,list){
   
 
   memorydriver.init(psid).then(function(memoryob){
-  //onsole.log('memorydriver callback');
+  //console.log('memorydriver callback');
       var plist=JSON.parse(JSON.stringify(list));
      // console.log(plist); 
  
- //  console.log(JSON.stringify(memoryob));
+  // console.log(JSON.stringify(memoryob));
     var fn=fulfillpromise(psid,memoryob);
  
     fn.remember(list);  

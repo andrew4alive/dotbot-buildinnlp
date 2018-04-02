@@ -17,11 +17,11 @@
 'use strict';
 
 // Imports dependencies and set up http server
-const 
-  request = require('request'),
-  express = require('express'),
-  body_parser = require('body-parser'),
-  app = express().use(body_parser.json()); // creates express http server
+ 
+var   request = require('request');
+ var express = require('express');
+ var body_parser = require('body-parser');
+ var app = express().use(body_parser.json()); // creates express http server
 
 var webhookroute = require('./route/webhook');
 //var msghandle= require('./msghandle.js');

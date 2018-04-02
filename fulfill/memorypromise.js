@@ -43,20 +43,18 @@ if(Object.keys(remember).indexOf(psid)>=0){
 m1.deleteentity=function(psid,kips){  //not tested
   if(!Array.isArray(kips)) return null;
   if(psid==null||psid==undefined) return null;
-  var ri=JSON.parse(JSON.stringify(remember));
-  var ent=null;
-   if(Object.keys(ri).indexOf(psid)!=-1){
-       if(Object.keys(ri[psid]).indexOf('entities')!=-1){
-         ent = ri[psid]['entities'];
-         
-       } 
-   }
-  if(ent==null) return null;
+// var ri=JSON.parse(JSON.stringify(remember));
+  var ri=remember;
+
+   if(Object.keys(ri).indexOf(psid)==-1) return ;
+       if(Object.keys(ri[psid]).indexOf('entities')==-1) return;
+  
   for(var i=0;i<kips.length;i++){
-      if(Object.keys(ent).indexOf(kips[i])!=-1){
-          delete ent[psid]['entities'][kips[i]];
+      if(Object.keys(ri[psid]['entities']).indexOf(kips[i])!=-1){
+          delete ri[psid]['entities'][kips[i]];
       }
   }
+  
 }; 
   
 m1.deleteallentity=function(psid){

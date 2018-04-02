@@ -1,40 +1,55 @@
 var fbresponselist = require('./fbresponselist');
 
 var respond = require('./respondhandler');
-var hcah=require('./core/hca.js');
+var witres=require('./reslist/witreslist');
+//var hcah=require('./core/hca.js');
 var confidence=0.5;
 
 module.exports=function(psid,msg,ob,resolve,reject,handletext){
+ var hcA={};
+  msg.entities={};
   try{
   var hcA = highconfidenceAll(ob.entities);
   msg.entities=hcA;
   }catch(err){
-  msg.entities={};
+  
   }
   
   try{
   //  console.log('start handlewit');
-  if(Object.keys(fbresponselist).indexOf('wit')!=-1){
-  
-  var wr=JSON.parse(JSON.stringify(fbresponselist.wit));
-  var wr=fbresponselist.wit;
-  //  console.log(JSON.stringify(fbresponselist));
-      var entities = wr.entities;
-   // console.log('handliewit');
-     // console.log( ob.entities);   
-    //console.log(msg);  
-  //  var hcA = highconfidenceAll(ob.entities);
-    var hcA = highconfidenceAll(ob.entities);
-    //  console.log(hcA);
-  var match=witmatch(wr,hcA,resolve,reject);
- //    console.log( match);
+
+       if(Object.keys(fbresponselist).indexOf('wit')==-1){
+          handletext(psid,msg,resolve,reject);
+         return;
+       }
+     witres.rc();
+    var  tm=witres.loop();
+    // console.log(tm);
+    var m2=null;
+   while(tm!=null){
+    
+       var m1=witmatch(tm,hcA,resolve,reject);
+ //    console.log(m1);
+       if(m1!=null&&typeof m1=='object'){
+          if(m2==null) m2=JSON.parse(JSON.stringify(m1));
+          else if(m1.count>m2.count){
+              m2=JSON.parse(JSON.stringify(m1));      
+          }
+       }    
+     tm=witres.loop();
+   //   console.log(tm);
+   }
+   // console.log('end',m2);
+//  var match=witmatch(wr,hcA,resolve,reject);
+  var match=m2;
+    //  console.log( match);
   if(match!=null){
+ //   console.log('witrespond match');
     match.wit=true;
     match.text=msg.text;
      respond(psid,match);
      resolve(false);
      return false;
-  }
   }
   }
   catch(err){
@@ -76,7 +91,7 @@ function witmatch(wr,hcA,resolve,reject){//wr is base on setting
           if(hcAkyc == 0) {
             return null;
           }
-        /*  if(count == hcAkyc&&Object.keys(arr).length==hcAkyc){ 
+       /*   if(count == hcAkyc&&Object.keys(arr).length==hcAkyc){ 
           //  console.log('by equal');
            // console.log('ent',ent);
             wr[i].entities= hcA;
@@ -84,7 +99,7 @@ function witmatch(wr,hcA,resolve,reject){//wr is base on setting
             return wr[i];
           }
           else*/ if(count == Object.keys(arr).length){
-               //  console.log('by logic');
+                // console.log('by logic');
               if(result==null){
                // console.log('by logic 1');
                 result=wr[i];
@@ -111,8 +126,8 @@ function witmatch(wr,hcA,resolve,reject){//wr is base on setting
       }// full loop
   //  console.log(count);
    // console.log(ent);
-    if(result!=null)
-      delete result.count;
+  //  if(result!=null)
+     // delete result.count;
       return result;
   }catch(err){
     reject(err);

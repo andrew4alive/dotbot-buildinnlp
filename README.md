@@ -66,15 +66,20 @@ this bot pirioty to using wit ai, if cannot match any repsond from <b>wit entiti
 </p>
 
 <h3>
- Wit ai  entities match setup({app location}/reslist/witreslist)
+ Wit ai  entities match setup({app location}/reslist/witlist.*js)
 </h3>
 <h4>find response</h4>
   <p>
-     this file containe  and export a <b>res</b> array,
+     this directory containe  and export a <b>res</b> array,
      the <b>res</b> containt all the object to match
      each object must contains <b>entities keys</b>
      and a <b>stext</b>or <b>fulfill</b> keys.
      
+  </p>
+  <p>
+    too ad a new file to wit list, add the line below:<br/>
+    add.addp('order');<br/>
+    to<b> reslist/witreslist.js </b>file, the order file is the file in       <b>reslist/witlist</b>reslist/witlist
   </p>
   <p>
    wit ai will send bot the entities , each entitiy contain array of possible value with confidence      level,
@@ -130,7 +135,7 @@ this bot pirioty to using wit ai, if cannot match any repsond from <b>wit entiti
   </p>
 
   <h3>
-  fulfillment({app location}/fulfillment/setup.js)
+  fulfillment({app location}/fulfillment/trsetup.js)
   </h3>
   <p>
     fulfillment is a function to as continues question.
@@ -229,6 +234,6 @@ this bot pirioty to using wit ai, if cannot match any repsond from <b>wit entiti
       }<br/>
     //other response list
     ]<br/>
-    
+    <br/>
     this will match response in witreslist, reply <b>'drink are latte'</b>
  </p>

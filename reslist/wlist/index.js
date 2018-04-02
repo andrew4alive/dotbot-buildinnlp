@@ -1,4 +1,5 @@
 var r=[
+  
     { "entities":
                 { 
                     'greetings':{value:'true'} 
@@ -13,7 +14,15 @@ var r=[
     greetings:{value:['*']}
   },
   stext:'bye , see you again'
-}
+},
+      { "entities":
+                { 
+                    intent:{value:'getname'},person:{value:['*']}
+                } 
+          ,
+       stext:'you {{{{}}intent{{}}}} is {{intent}},value is {{person}}'
+  },
+ 
 
 ];
 
