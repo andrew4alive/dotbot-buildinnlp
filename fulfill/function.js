@@ -126,8 +126,6 @@ function beforesetup(ob){
   }
 }
 
-function dmkey(ob){//key to delete _f,_c
-  if(ob==null&&typeof ob !='object'){
-     
-  }
+function sort(arr,arrsort){
+  
 }
