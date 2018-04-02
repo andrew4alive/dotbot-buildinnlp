@@ -34,6 +34,8 @@ fn.triggercheck=function(psid,setup,remember,list){
     return null;
   }
   var triggered = setup.trigger[list.fulfill];
+  var arrsort=setsort(triggered);
+  
   beforesetup(triggered);
 
   var tky=Object.keys(triggered);
@@ -59,6 +61,7 @@ fn.triggercheck=function(psid,setup,remember,list){
     }
    
   }
+  var toremember=sort(toremember,arrsort);
   return {toremember:toremember,trigger:list.fulfill,entities:enttemp};
   /*if(Object.keys(remember).indexOf(psid)==-1){
     return [];   
@@ -75,6 +78,7 @@ fn.memorycheck=function(psid,setup,remember,mymt,list){
     var list=JSON.parse(JSON.stringify(list));
   var remember=JSON.parse(JSON.stringify(remember));
   var trigger=JSON.parse(JSON.stringify(setup.trigger[mymt]));
+  var arrsort=setsort(trigger);
    beforesetup(trigger);
   var trky=Object.keys(trigger);
   var listkeys=Object.keys(list);
@@ -89,7 +93,8 @@ fn.memorycheck=function(psid,setup,remember,mymt,list){
     
   }
   
-  //delete toremember['_f'];
+  var toremember=sort(toremember,arrsort);
+ 
   return {toremember:toremember,trigger:mymt};
 };
 
@@ -127,5 +132,37 @@ function beforesetup(ob){
 }
 
 function sort(arr,arrsort){
+  var re=[];
+  if(!Array.isArray(arr)||!Array.isArray(arrsort)){
+    return arr; 
+  }
+   if(arrsort.length==0){
+    return arr; 
+  }
+ /*  if(!Array.isArray(arrsort)){
+    return arr; 
+  }*/
+  var arr=JSON.parse(JSON.stringify(arr));
+  for(var i =0;i<arrsort.length;i++){
+    var as=arrsort[i];
+    var ix=arr.indexOf(as);
+    if(ix==-1||typeof as !='string') continue;
+    arr.splice(ix+1,1);
+    re.push(as);
+  }
+  re.concat(arr);
+  return re;
+}
+
+function setsort(triggered){
+if(Object.keys(triggered).indexOf('_od')!=-1){
+     try{
+     return JSON.parse(JSON.stringify(triggered._od));    
+     }catch(err){
+        console.log(err); 
+     }
+     }
   
+  return [];
+
 }
